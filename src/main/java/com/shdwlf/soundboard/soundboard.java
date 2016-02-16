@@ -28,6 +28,7 @@ public class soundboard extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
+        saveDefaultConfig();
         sounds.addAll(Arrays.asList(Sound.values()));
 
         Collections.sort(sounds, new Comparator<Sound>() {
@@ -69,7 +70,10 @@ public class soundboard extends JavaPlugin implements Listener {
                }
             }else {
                 Player player = (Player) event.getWhoClicked();
-                player.playSound(player.getLocation(), Sound.valueOf(is.getItemMeta().getDisplayName().split(ChatColor.AQUA.toString())[1]), 1, 1);
+                if(getConfig().getBoolean("broadcast-sound", false))
+                    player.getLocation().getWorld().playSound(player.getLocation(), Sound.valueOf(is.getItemMeta().getDisplayName().split(ChatColor.AQUA.toString())[1]), 1, 1);
+                else
+                    player.playSound(player.getLocation(), Sound.valueOf(is.getItemMeta().getDisplayName().split(ChatColor.AQUA.toString())[1]), 1, 1);
                 event.setCancelled(true);
             }
         }
